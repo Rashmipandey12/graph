@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include<stdlib.h>
+typedef struct node{
+    int vertex;
+    struct node *next;
+}*Node;
+Node createnode(int vertex){
+    Node new=(Node)malloc(sizeof(struct node));
+    if(new==NULL){
+        printf("No memory allocation");
+        exit(1);
+    }
+    new->vertex=vertex;
+    new->next=NULL;
+    return new;
+}
+Node insert_front(Node start,int data){
+    Node new=createnode(data);
+    new->next=start;
+    start=new;
+    return start;
+}
+int numVertex;
+Node*adjacentList;
+void initalize(int vertex){
+    numVertex=vertex;
+    adjacentList=(Node*)malloc(vertex*sizeof(Node));
+    for(int i=0;i<vertex;i++){
+        adjacentList[i]=NULL;
+    }
+}
+void addEdge(int src,int des){
+    adjacentList[src]=insert_front(adjacentList[src],des);
+    adjacentList[des]=insert_front(adjacentList[des],src);
+}
+void printEdge(){
+    for(int i=0;i<numVertex;i++){
+        Node temp=adjacentList[i];
+        printf("Vertex %d",i);
+        while(temp)
+        {
+            printf("->%d",temp->vertex);
+            temp=temp->next;
+        }
+        printf("\n");
+    }
+}
+int main(){
+    initalize(5);
+    addEdge(1,2);
+    addEdge(1,4);
+    addEdge(4,2);
+    printEdge();
+    return 0;
+}
